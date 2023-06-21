@@ -1,6 +1,8 @@
 const express = require('express');
+const talkerRoute = require('./routes/talker.route');
 
 const app = express();
+app.use(talkerRoute);
 app.use(express.json());
 
 const HTTP_OK_STATUS = 200;
