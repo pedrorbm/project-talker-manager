@@ -1,6 +1,7 @@
 const validatingKeyEmail = (req, res, next) => {
-  const keyEmail = ['email'];
-  if (keyEmail.every((key) => key in req.body)) {
+  const key = 'email';
+
+  if (key in req.body) {
     next();
   } else {
     res.status(400).json({ message: 'O campo "email" é obrigatório' });
@@ -19,8 +20,9 @@ const validatingEmail = (req, res, next) => {
 };
 
 const validatingKeyPassword = (req, res, next) => {
-  const keyPassword = ['password'];
-  if (keyPassword.every((key) => key in req.body)) {
+  const key = 'password';
+  
+  if (key in req.body) {
     next();
   } else {
     res.status(400).json({ message: 'O campo "password" é obrigatório' });
