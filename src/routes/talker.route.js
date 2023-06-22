@@ -22,7 +22,11 @@ router.get('/talker/:id', validatingTalker, async (req, res) => {
 router.post('/talker', validatingToken, validatingName, validatingAge, validatingTalk, 
 validatingWatchedAt, validatingRate, async (req, res) => {
   const talkers = await readTalker();
-  let acres = 6;
+  let acres = 0;
+  talkers.map((talker) => {
+    acres = talker.id;
+    return acres;
+  });
   
   if (talkers.some(({ id }) => id === acres)) {
     acres += 1;
