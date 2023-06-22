@@ -1,3 +1,5 @@
+const { readTalker } = require('../utils/fsTalker');
+
 const validatingToken = (req, res, next) => {
   const authorization = 'authorization';
   const token = req.header('authorization');
@@ -82,6 +84,18 @@ const validatingRate = (req, res, next) => {
   return next();
 };
 
+const validatingTalker = async (req, res, next) => {
+  const { id } = req.params;
+  const talkers = await readTalker();
+  const search = talkers.find((talker) => talker.id === Number(id));
+
+  if (search === undefined) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  
+  return next();
+};
+
 module.exports = {
   validatingToken,
   validatingName,
@@ -89,4 +103,5 @@ module.exports = {
   validatingTalk,
   validatingWatchedAt,
   validatingRate,
+  validatingTalker,
 };

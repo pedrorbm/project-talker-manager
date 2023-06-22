@@ -1,7 +1,7 @@
 const express = require('express');
 const { readTalker, writeTalker } = require('../utils/fsTalker');
-const { validatingToken, validatingName, validatingAge, validatingTalk, 
-  validatingWatchedAt, validatingRate } = require('../middlewares/validatingTalker');
+const { validatingToken, validatingName, validatingAge, validatingTalk, validatingWatchedAt, 
+  validatingRate, validatingTalker } = require('../middlewares/validatingTalker');
 
 const router = express.Router();
 router.use(express.json());
@@ -36,6 +36,21 @@ validatingWatchedAt, validatingRate, async (req, res) => {
   await writeTalker(talkers);
 
   return res.status(201).json(req.body);
+});
+
+router.put('/talker/:id', validatingToken, validatingName, validatingAge, validatingTalk, 
+validatingWatchedAt, validatingRate, validatingTalker, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readTalker();
+  const search = talkers.find((talker) => talker.id === Number(id));
+
+  search.name = req.body.name;
+  search.age = req.body.age;
+  search.talk.watchedAt = req.body.talk.watchedAt;
+  search.talk.rate = req.body.talk.rate;
+  await writeTalker(talkers);
+
+  return res.status(200).json(search);
 });
 
 module.exports = router;
