@@ -11,14 +11,11 @@ router.get('/talker', async (req, res) => {
   res.status(200).json(talkers);
 });
 
-router.get('/talker/:id', async (req, res) => {
+router.get('/talker/:id', validatingTalker, async (req, res) => {
   const talkers = await readTalker();
   const { id } = req.params;
   const searchId = talkers.find((talker) => talker.id === Number(id));
 
-  if (!searchId) {
-    return res.status(404).send({ message: 'Pessoa palestrante não encontrada' });
-  } 
   return res.status(200).json(searchId);
 });
 
@@ -51,6 +48,15 @@ validatingWatchedAt, validatingRate, validatingTalker, async (req, res) => {
   await writeTalker(talkers);
 
   return res.status(200).json(search);
+});
+
+router.delete('/talker/:id', validatingToken, validatingTalker, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readTalker();
+  const search = talkers.filter((talker) => talker.id !== Number(id));
+  await writeTalker(search);
+
+  return res.status(204).end();
 });
 
 module.exports = router;
